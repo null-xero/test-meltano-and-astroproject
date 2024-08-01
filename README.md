@@ -122,7 +122,18 @@ plugins:
         project_dir: /path/to/dbt/project
 ```
 
-## 5. Open Airplaw
-Open url: http://localhost:8080/ for Airflow UI
+## 5. Testing Data Pipeline
+Go to Airplaw UI and navigate to `DAGs`
+
+Open url: http://localhost:8080/ for Airplaw UI
 - USERNAME: `admin`
 - PASSWORD: `admin`
+
+1. Especially those using plugins `csv`, `jsonl`, `dbt`
+```
+meltano run tap-csv target-jsonl
+```
+
+## 6. ---
+
+## 7. Continue...
