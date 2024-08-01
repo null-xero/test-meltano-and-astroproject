@@ -1,18 +1,18 @@
 TEST ASTRO PROJECT AND MELTANO
 ===
 
-### 1. Check Piton/UloKatok
+## 1. Check Piton/UloKatok
 ```
 python3 --version
 ```
 
-### 2. Making Pirtual Enpironmen
+## 2. Making Pirtual Enpironmen
 ```
 python3 -m venv venvtest
 source venvtest/bin/activate
 ```
 
-### 3. Install AstroBoy
+## 3. Install AstroBoy
 ```
 curl -sSL install.astronomer.io | sudo bash -s -- v1.28.0
 ```
@@ -22,12 +22,11 @@ curl -sSL install.astronomer.io | sudo bash -s
 ```
 - Create Project
 ```
-mkdir astroboy-project
-cd astroboy-project
+cd astroboy_project
 astro dev init
 ```
 
-### 4. Install Metanol
+## 4. Install Metanol `THERE ARE TWO OPTIONS`
 ```
 pip install --upgrade pip
 pip install "meltano"
@@ -35,8 +34,8 @@ pip install "meltano"
 - Create Metanol Project
 ```
 cd ..
-meltano init my-metanol-project
-cd my-metanol-project
+cd my_metanol_project
+meltano init
 ```
 - Add Plugin Metanol
 1.  Plugin Extractor & Loader `postgres`
@@ -52,20 +51,20 @@ plugins:
     config:
       host: localhost
       port: 5432
-      user: myuser
-      password: mypassword
+      user: meltano
+      password:
       dbname: mydatabase
   loaders:
   - name: target-postgres
     config:
       host: localhost
       port: 5432
-      user: myuser
-      password: mypassword
+      user: meltano
+      password:
       dbname: mydatabase
 ```
 
-#### or
+# or
 
 1. Plugin Extractor `csv`, Loader `jsonl`, & Transformer `dbt`
 ```
@@ -95,9 +94,9 @@ plugins:
   extractors:
     - name: tap-csv
       config:
-        # Lokasi file CSV yang akan diekstrak
+        # Location of the CSV file to extract
         path: /path/to/your/data.csv
-        # Opsi tambahan, misalnya delimiter
+        # Additional options, for example delimiter
         delimiter: ","
 ```
 b. Loaders `target-jsonl`
@@ -106,9 +105,9 @@ plugins:
   loaders:
     - name: target-jsonl
       config:
-        # Direktori output untuk file JSONL
+        # Output directory for JSONL files
         output_dir: /path/to/output/directory
-        # Apakah akan menimpa file yang ada
+        # Whether to overwrite existing files
         overwrite: true
 ```
 c. Transformer `dbt`
@@ -117,10 +116,13 @@ plugins:
   transformers:
     - name: dbt
       config:
-        # Direktori yang berisi profil dbt
+        # Directory containing dbt profiles
         profiles_dir: /path/to/dbt/profiles
-        # Direktori proyek dbt
+        # Dbt project directory
         project_dir: /path/to/dbt/project
 ```
 
-### 5. Continue...
+## 5. Open Airplaw
+Open url: http://localhost:8080/ for Airflow UI
+- USERNAME: `admin`
+- PASSWORD: `admin`
