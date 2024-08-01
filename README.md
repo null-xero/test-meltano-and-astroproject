@@ -8,8 +8,8 @@ python3 --version
 
 ## 2. Making Pirtual Enpironmen
 ```
-python3 -m venv venvtest
-source venvtest/bin/activate
+python3 -m venv .venvtest
+source .venvtest/bin/activate
 ```
 
 ## 3. Install AstroBoy
@@ -34,8 +34,8 @@ pip install "meltano"
 - Create Metanol Project
 ```
 cd ..
+meltano init my_metanol_project
 cd my_metanol_project
-meltano init
 ```
 - Add Plugin Metanol
 1.  Plugin Extractor & Loader `postgres`
@@ -123,17 +123,63 @@ plugins:
 ```
 
 ## 5. Testing Data Pipeline
-Go to Airplaw UI and navigate to `DAGs`
-
-Open url: http://localhost:8080/ for Airplaw UI
-- USERNAME: `admin`
-- PASSWORD: `admin`
-
-1. Especially those using plugins `csv`, `jsonl`, `dbt`
+- Especially those using plugins `csv`, `jsonl`, `dbt`
 ```
 meltano run tap-csv target-jsonl
 ```
 
-## 6. ---
+## 6. Run Airplow in local
+Go to Airplaw UI and navigate to `DAGs`
+```
+astro dev start
+```
+Open url: http://localhost:8080/ for Airplaw UI
+- USERNAME: `admin`
+- PASSWORD: `admin`
 
-## 7. Continue...
+## 7. Create File in FAGs
+Go to directory astroboy_project/dags
+- Create file `testing_postgres_metanol_astroboy.py` and copy code below
+```
+from airflow import DAG
+from datetime import datetime
+from airflow.operators.bash import BashOperator
+
+dag = DAG(
+        'postgres-metanol-astroboy',
+        description='Hello, The DAGs Testing Metanol AstroBoy For Postgres',
+        schedule_interval='0 */5 * * *',
+        start_date=datetime(2024, 7, 31),
+        catchup=False
+)
+
+run_meltano = BashOperator(
+    task_id='run_meltano',
+    bash_command='cd /my_metanol_project && meltano run tap-postgres target-postgres',
+    dag=dag,
+)
+```
+- Create file `testing_csvjsonldbt_metanol_astroboy.py` and copy code below
+```
+from airflow import DAG
+from datetime import datetime
+from airflow.operators.bash import BashOperator
+
+dag = DAG(
+        'csvjsonldbt-metanol-astroboy',
+        description='Hello, The DAGs Testing Metanol AstroBoy For CSV, JSONL, And DBT',
+        schedule_interval='0 */5 * * *',
+        start_date=datetime(2024, 7, 31),
+        catchup=False
+)
+
+run_etl = BashOperator(
+    task_id='run_meltano_etl',
+    bash_command='cd /my_metanol_project && meltano run tap-csv target-jsonl',
+    dag=dag,
+)
+```
+
+## 7. ---
+
+## 8. Continue...
