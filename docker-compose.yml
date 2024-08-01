@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  astro:
+    image: astronomerinc/ap-airflow:latest
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./astro-project/dags:/usr/local/airflow/dags
+      - ./astro-project/plugins:/usr/local/airflow/plugins
+    ports:
+      - "8080:8080"
+
+  meltano:
+    image: meltano/meltano:latest
+    volumes:
+      - ./meltano-project:/project
+    working_dir: /project
+    command: meltano ui
+    ports:
+      - "5000:5000"
