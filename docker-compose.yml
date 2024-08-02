@@ -14,7 +14,7 @@ services:
   meltano:
     image: meltano/meltano:latest
     volumes:
-      - ./my_metanol_project:/project
+      - ./metanol_project:/project
     working_dir: /project
     command: meltano ui
     ports:

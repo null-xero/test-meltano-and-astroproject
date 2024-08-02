@@ -1,6 +1,11 @@
 TEST ASTRO PROJECT AND MELTANO
 ===
 
+## 0. Docker
+```
+docker compose up -d
+```
+
 ## 1. Check Piton/UloKatok
 ```
 python3 --version
@@ -34,8 +39,8 @@ pip install "meltano"
 - Create Metanol Project
 ```
 cd ..
-meltano init my_metanol_project
-cd my_metanol_project
+meltano init metanol_project
+cd metanol_project
 ```
 - Add Plugin Metanol
 1.  Plugin Extractor & Loader `postgres`
@@ -155,7 +160,7 @@ dag = DAG(
 
 run_meltano = BashOperator(
     task_id='run_meltano',
-    bash_command='cd /my_metanol_project && meltano run tap-postgres target-postgres',
+    bash_command='cd /metanol_project && meltano run tap-postgres target-postgres',
     dag=dag,
 )
 ```
@@ -175,7 +180,7 @@ dag = DAG(
 
 run_etl = BashOperator(
     task_id='run_meltano_etl',
-    bash_command='cd /my_metanol_project && meltano run tap-csv target-jsonl',
+    bash_command='cd /metanol_project && meltano run tap-csv target-jsonl',
     dag=dag,
 )
 ```
