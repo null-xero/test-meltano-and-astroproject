@@ -1,0 +1,39 @@
+# version: 1
+# default_environment: dev
+# project_id: b3dfafae-6b65-4b1f-bca4-7f81c71a4e9c
+# environments:
+# - name: dev
+# - name: staging
+# - name: prod
+
+
+version: 1
+plugins:
+  # extractors:
+  # - name: tap-csv
+  #   variant: meltanolabs
+  #   pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+  #   config:
+  #     files:
+  #     - path: data/olist_orders_dataset.csv
+  #       key_properties: id
+    # Add other extractors for other CSV files similarly
+  # extractors:
+  # - name: tap-csv
+  #   variant: meltanolabs
+  #   pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+  extractors:
+  - name: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+  loaders:
+  - name: target-postgres
+    variant: meltanolabs
+    pip_url: meltanolabs-target-postgres
+    config:
+      host: postgres
+      port: 5432
+      user: postgres
+      password: postgres
+      dbname: ecommerce_db
+project_id: 5a24687f-2e39-404d-b0a6-2e08f24b20d4
