@@ -2,7 +2,8 @@
 # apache-airflow
 # apache-airflow-providers-dbt-cloud
 
-# Example content of requirements.txt after removal of apache-airflow
-pandas==1.5.3
-sqlalchemy==1.4.47
-# Add other dependencies here
+# meltano==2.10.0
+# pandas==1.5.3
+# sqlalchemy==1.4.47
+
+apache-airflow-providers-docker==3.12.2

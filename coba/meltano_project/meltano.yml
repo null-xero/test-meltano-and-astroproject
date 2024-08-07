@@ -1,39 +1,73 @@
-# version: 1
-# default_environment: dev
-# project_id: b3dfafae-6b65-4b1f-bca4-7f81c71a4e9c
-# environments:
-# - name: dev
-# - name: staging
-# - name: prod
-
-
 version: 1
+project_id: 5a24687f-2e39-404d-b0a6-2e08f24b20d4
+default_environment: environment_meltano
+
+environments:
+- name: environment_meltano
+  config:
+    snowflake:
+      account: ${SNOWFLAKE_ACCOUNT}
+      user: ${SNOWFLAKE_USER}
+      password: ${SNOWFLAKE_PASSWORD}
+      database: ${SNOWFLAKE_DATABASE}
+      warehouse: ${SNOWFLAKE_WAREHOUSE}
+      role: ${SNOWFLAKE_ROLE}
+      schema: ${SNOWFLAKE_SCHEMA}
 plugins:
-  # extractors:
-  # - name: tap-csv
-  #   variant: meltanolabs
-  #   pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
-  #   config:
-  #     files:
-  #     - path: data/olist_orders_dataset.csv
-  #       key_properties: id
-    # Add other extractors for other CSV files similarly
-  # extractors:
-  # - name: tap-csv
-  #   variant: meltanolabs
-  #   pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
   extractors:
   - name: tap-csv
     variant: meltanolabs
     pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
-  loaders:
-  - name: target-postgres
-    variant: meltanolabs
-    pip_url: meltanolabs-target-postgres
     config:
-      host: postgres
-      port: 5432
-      user: postgres
-      password: postgres
-      dbname: ecommerce_db
-project_id: 5a24687f-2e39-404d-b0a6-2e08f24b20d4
+      files:
+      - path: data/olist_products_dataset.csv
+        keys:
+        - product_id
+        entity: products
+  # - name: tap-smoke-test
+  #   variant: meltano
+  #   pip_url: git+https://github.com/meltano/tap-smoke-test.git
+  #   config:
+  #     streams:
+  #     - stream_name: animals
+  #       input_filename: 
+  #         https://raw.githubusercontent.com/meltano/tap-smoke-test/main/demo-data/animals-data.jsonl
+  - name: tap-spreadsheets-anywhere
+    variant: ets
+    pip_url: git+https://github.com/ets/tap-spreadsheets-anywhere.git
+    namespace: tap_spreadsheets_anywhere
+    config:
+      tables:
+        - path: "file://data/"
+          name: "order_payment"
+          pattern: "olist_order_payments_dataset.csv"
+          start_date: "2023-01-01T00:00:00Z"
+          key_properties: ["order_id"]
+          format: "csv"
+
+  loaders:
+  - name: target-snowflake
+    variant: meltanolabs
+    pip_url: meltanolabs-target-snowflake
+    config:
+      # account: MELTANO_ACCOUNT
+      # user: MELTANO_USER
+      # password: MELTANO_PASSWORD
+      database: MELTANO_DATABASE
+      warehouse: MELTANO_WAREHOUSE
+      role: MELTANO_ROLE
+      schema: MELTANO_SCHEMA
+      add_record_metadata: true
+      clean_up_batch_files: true
+      hard_delete: false
+      load_method: append-only
+      use_browser_authentication: false
+      validate_records: true
+  # - name: target-postgres
+  #   variant: meltanolabs
+  #   pip_url: meltanolabs-target-postgres
+  #   config:
+  #     host: localhost
+  #     port: 5432
+  #     dbname: meltano_postgres_db
+  #     user: postgres
